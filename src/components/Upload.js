@@ -62,8 +62,35 @@ function Upload() {
         });
     };
 
+    const calculate = (event) => {
+        const lambda = new AWS.Lambda({
+            region: process.env.REACT_APP_REGION,
+            secretAccessKey: process.env.REACT_APP_ACCESS_KEY,
+            accessKeyId: process.env.REACT_APP_ACCESS_ID
+        });
+        const params = {
+            FunctionName: 'mytestfunction',
+            InvocationType: 'RequestResponse',
+            Payload: JSON.stringify({
+                a: a,
+                b: b,
+                op: op
+            })
+        };
+        lambda.invoke(params, function(err, obj){
+            if (err) {
+                console.error(err);
+            } else {
+               alert("Result is: " + obj.Payload);
+            }
+        });
+    }
+
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [a, setA] = useState(0);
+    const [b, setB] = useState(0);
+    const [op, setOp] = useState('Add');
 
     return (
         <>
@@ -94,6 +121,39 @@ function Upload() {
             </label>
             <br/>
             <button type='submit' onClick={handleClick}>Upload</button>
+            <br/><br/><br/>
+            <label>
+                Enter value of a:
+                <input
+                    value={a}
+                    onChange={event => setA(event.target.value)}
+                    name="a"
+                    type="number"
+                />
+            </label>
+            <br/>
+            <label>
+                Enter value of b:
+                <input
+                    value={b}
+                    onChange={event => setB(event.target.value)}
+                    name="b"
+                    type="number"
+                />
+            </label>
+            <br/>
+            <label>
+                Operation:
+                <select
+                    value={op}
+                    onChange={event => setOp(event.target.value)}>
+                    <option value="Add">Add</option>
+                    <option value="Subtract">Subtract</option>
+                    <option value="Multiply">Multiply</option>
+                </select>
+            </label>
+            <br/>
+            <button type='submit' onClick={calculate}>Calculate</button>
         </>
     );
 }
