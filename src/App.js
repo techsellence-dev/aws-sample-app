@@ -1,6 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import Upload from "./components/Upload";
+import TreeView from "./components/TreeView";
 
 function App() {
   return (
@@ -23,4 +24,4 @@ function App() {
   );
 }
 
-export default Upload;
+export default TreeView;
